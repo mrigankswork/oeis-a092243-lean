@@ -1,0 +1,4 @@
+formal-conjectures/
+*.olean
+check2
+__pycache__/
