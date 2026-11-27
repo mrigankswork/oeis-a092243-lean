@@ -44,7 +44,7 @@ limitations under the License.
 # Only what the definitions need (upstream imports all of Mathlib via FormalConjecturesUtil;
 # the elaborated terms are the same, which the Expr dump check confirms). This keeps a full
 # `lake build` small in memory.
-IMPORTS = "import Mathlib.Data.Nat.Prime.Nth\nimport Mathlib.Algebra.BigOperators.Intervals\n"
+IMPORTS = "module\n\npublic import Mathlib.Data.Nat.Prime.Nth\npublic import Mathlib.Algebra.BigOperators.Intervals\n"
 NOTE = """The definitions `primeGap`, `a` and the statement of `conjecture1` are copied verbatim (by
 `scripts/gen_challenge.py`) from google-deepmind/formal-conjectures@9097e2f,
 `FormalConjectures/OEIS/92243.lean`. Only the `@[category ...]` attribute is dropped (it comes from
@@ -58,6 +58,8 @@ challenge = LICENSE + IMPORTS + f"""
 {NOTE}
 -/
 
+@[expose] public section
+
 namespace OeisA92243
 
 {defs}
@@ -65,10 +67,12 @@ namespace OeisA92243
 {stmt}
 
 end OeisA92243
+
+end
 """
 
 proof_doc = stmt.split("theorem")[0]
-solution = LICENSE + IMPORTS + "import OeisA92243.Bridge\n" + f"""
+solution = LICENSE + IMPORTS + "public import OeisA92243.Bridge\n" + f"""
 /-!
 # OEIS A092243, conjecture 1 (solution)
 
@@ -79,6 +83,8 @@ Proof: the witness is `n = 261150`, with `a 261150 = 1`. `OeisA92243.partialScor
 `partialScore 261150 = 1`, and `partialScore` is `a`'s sum with `primeGap` unfolded.
 No `native_decide`.
 -/
+
+@[expose] public section
 
 namespace OeisA92243
 
@@ -94,6 +100,8 @@ namespace OeisA92243
   norm_num
 
 end OeisA92243
+
+end
 """
 pathlib.Path("Challenge.lean").write_text(challenge)
 pathlib.Path("Solution.lean").write_text(solution)

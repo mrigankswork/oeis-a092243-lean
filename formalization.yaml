@@ -1,0 +1,150 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "OEIS A092243: the prime-gap tug-of-war score is positive for some n > 250000"
+  description: >-
+    A kernel-checked Lean 4 proof that the prime-gap "tug of war" score of OEIS A092243
+    becomes positive again after n = 250000. This answers the question "Is s > 0 for some
+    n > 250000?" asked in the OEIS entry. The score is a(n) = sum over k = 2..n of
+    sign(g(k) - g(k-1)), where g(k) = p(k) - p(k-1) is the k-th prime gap and primes are
+    counted from p(0) = 2. The proof shows a(261150) = 1. The statement is the formal-conjectures
+    formalization OeisA92243.conjecture1, copied verbatim. The proof is a computation checked
+    entirely by Lean's kernel. The kernel sieves the primes below 3,666,582 in 381 blocks with a
+    gcd test and folds the score over them, and a soundness argument connects this computation to
+    Mathlib's Nat.nth Nat.Prime. No native_decide is used. The numerical value is not new: it
+    already appears in N. J. A. Sloane's table of a(n) for n <= 965,562, linked from the OEIS
+    entry. The contribution is the machine-checked proof.
+  authors:
+    - "Mrigank"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Mrigank"
+
+classification:
+  arxiv: ["math.NT"]
+  msc2020: ["11N05", "11A41", "11Y55", "11Y11"]
+
+sources:
+  - title: "OEIS A092243: score at stage n in tug of war between prime gap increases vs. prime gap decreases"
+    contributors:
+      - name: "Joseph L. Pe"
+        role: "author of the sequence (2002)"
+      - name: "N. J. A. Sloane"
+        role: "posed the question 'Is s > 0 for some n > 250000?' in the entry's comments"
+    id: "https://oeis.org/A092243"
+    type: "other"
+    location: "https://oeis.org/A092243"
+    relationship: "formalizes"
+    note: >-
+      The sequence definition and the question come from this OEIS entry. The Lean statement is
+      formal-conjectures' formalization of the question, and the Lean proof answers it.
+    license: "CC BY-SA 4.0"
+    author_endorsement: "not-contacted"
+  - title: "N. J. A. Sloane, Table of n, a(n) for n = 1..965562 (a092243_1.txt)"
+    authors:
+      - "N. J. A. Sloane"
+    id: "https://oeis.org/A092243/a092243_1.txt"
+    type: "other"
+    location: "https://oeis.org/A092243/a092243_1.txt"
+    relationship: "independently-proves"
+    note: >-
+      This table already lists a(261149) = 0 and a(261150) = 1, so the answer was visible in OEIS
+      data before this formalization. The witness n = 261150 was chosen from it and rechecked with
+      two independent sieves. The Lean proof does not use the table: it establishes the same value
+      by its own kernel-checked computation.
+    license: "CC BY-SA 4.0"
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/9097e2f90e66d2f6244209cb1c07f7120d17ec53/FormalConjectures/OEIS/92243.lean"
+    relationship: "builds-on"
+    note: >-
+      Source of the formal statement. The definitions primeGap and a and the theorem conjecture1
+      (tagged research open, with sorry) are copied verbatim into Challenge.lean. Their elaborated
+      terms were checked byte-identical to upstream's: on Lean/Mathlib v4.35.0-rc2, and also against
+      upstream's own v4.33.1 build, where only a reducibility-height hint of primeGap differs.
+  - id: "https://github.com/mrigankswork/oeis-a092243-lean/tree/v0.1"
+    relationship: "supersedes"
+    note: >-
+      The same author's earlier proof of the same statement. It evaluated the computation with
+      native_decide, so it trusted the Lean compiler. This version replaces that step with checking
+      by Lean's kernel.
+
+status:
+  scope: >-
+    Proves exactly OeisA92243.conjecture1, "there exists n > 250000 with a n > 0", with the witness
+    n = 261150 (a 261150 = 1). It does not address the other questions in the same upstream file:
+    whether a is bounded below or above, or positive or negative infinitely often. The proof depends
+    only on the axioms propext, Classical.choice and Quot.sound, and uses no native_decide. All
+    computation is done by decide +kernel in many small theorems. It has been built and checked on
+    Lean and Mathlib v4.35.0-rc2 only.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5 (Anthropic), for this version", "Claude models (Anthropic) in earlier sessions; exact versions not recorded"]
+      framework: "Claude Code"
+      tool_setup: >-
+        A Claude Code CLI agent with the Lean 4 toolchain and Lake, Lean 4 plugin skills, and Python
+        scripts for exact-integer sieves and certificate generation. The agent wrote all Lean and
+        Python code and the documentation. Heavy Lean builds ran under a memory watchdog.
+      cost:
+        wall_time: "about two days of agent sessions, 2026-11-26 to 2026-11-27"
+        spend_usd: "not tracked"
+        hardware: "local machine (Apple Silicon Mac, 16 GB RAM)"
+      prompting_notes: >-
+        The human set the goal (prove or disprove an open formal-conjectures statement, then remove
+        native_decide) and approved each publication step. The agent chose the proof method,
+        generated the certificate and wrote the soundness proof.
+  spend_usd: "not tracked"
+  notes: >-
+    The work was done in a human-directed workbench for open formal-conjectures statements. The problem
+    was picked from a generated shortlist. An agent checked the problem's status, computed small
+    cases with exact arithmetic, and wrote and debugged the Lean proof. A separate, freshly started
+    agent refereed the result. The human approved publication. No human mathematician has reviewed
+    the proof.
+
+fidelity:
+  divergences: >-
+    None known for the question asked. The Lean definition of a also sets a(0) = 0, whereas OEIS
+    starts at n = 1; this does not matter for n > 250000. The statement asserts existence only; the
+    witness 261150 appears in the proof, not in the statement.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "An independent Claude (Anthropic) referee agent, for this version"
+    - "Gemini (Google), via the Antigravity CLI, for the earlier native_decide version only"
+  notes: >-
+    The Claude referee was a freshly started agent, given only the OEIS question, the upstream Lean
+    file and this project. It rebuilt the project from clean and checked #print axioms. It replayed
+    every module with leanchecker and compared the elaborated statement with upstream's, byte for
+    byte. It also ran mutation tests: changing any number in a certificate block is rejected by the
+    kernel. An independent Python sieve reproduced all 381 block states and a(261150) = 1. The
+    referee accepted. A Gemini review of this version has not completed. The earlier native_decide
+    version was accepted by both an independent Claude referee and Gemini. There has been no human
+    expert review.
+
+alignment:
+  namespace: "OeisA92243"
+  statements:
+    - source: "OEIS A092243, comment: 'Is s > 0 for some n > 250000?'"
+      lean: "OeisA92243.conjecture1"
+      module: "Challenge"
+      status: "proved"
+      note: >-
+        The statement is ∃ n > 250000, a n > 0. Here a n = 0 for n ≤ 1, and otherwise
+        a n = Σ_{k=2}^{n} sign(primeGap k - primeGap (k-1)), where
+        primeGap n = Nat.nth Nat.Prime n - Nat.nth Nat.Prime (n-1). Primes are 0-indexed
+        (Nat.nth Nat.Prime 0 = 2), so primeGap k is the OEIS "k-th prime gap" p(k+1) - p(k) in
+        1-indexed notation. The ℕ subtraction never truncates for k ≥ 1, and each gap is cast to ℤ
+        before the subtraction.
+
+acknowledgements: >-
+  Lean 4 and its kernel; Mathlib; google-deepmind/formal-conjectures (the formal statement,
+  Apache-2.0); the OEIS and N. J. A. Sloane (the question and the data table); Joseph L. Pe (the
+  sequence).

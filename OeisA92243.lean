@@ -14,7 +14,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -/
-import OeisA92243.Bridge
+module
+
+public import OeisA92243.Bridge
 
 /-!
 # OEIS A092243, conjecture 1: kernel-only proof (library root)
@@ -26,5 +28,5 @@ import OeisA92243.Bridge
 * `OeisA92243/Bridge.lean`: soundness, ending in `OeisA92243.partialScore_261150`.
 * `Challenge.lean` / `Solution.lean` (separate libraries): the upstream statement, and its proof.
 
-The previous version, which used `native_decide`, is kept in `legacy/OeisA92243_native_decide.lean`.
+The previous version, which used `native_decide`, is at git tag `v0.1`.
 -/

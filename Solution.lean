@@ -14,9 +14,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -/
-import Mathlib.Data.Nat.Prime.Nth
-import Mathlib.Algebra.BigOperators.Intervals
-import OeisA92243.Bridge
+module
+
+public import Mathlib.Data.Nat.Prime.Nth
+public import Mathlib.Algebra.BigOperators.Intervals
+public import OeisA92243.Bridge
 
 /-!
 # OEIS A092243, conjecture 1 (solution)
@@ -32,6 +34,8 @@ Proof: the witness is `n = 261150`, with `a 261150 = 1`. `OeisA92243.partialScor
 `partialScore 261150 = 1`, and `partialScore` is `a`'s sum with `primeGap` unfolded.
 No `native_decide`.
 -/
+
+@[expose] public section
 
 namespace OeisA92243
 
@@ -59,3 +63,5 @@ theorem conjecture1 : ∃ n > 250000, a n > 0 := by
   norm_num
 
 end OeisA92243
+
+end

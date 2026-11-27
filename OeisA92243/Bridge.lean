@@ -14,11 +14,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -/
-import OeisA92243.Checks
-import Mathlib.Data.Nat.Prime.Nth
-import Mathlib.Algebra.BigOperators.Intervals
-import Mathlib.Tactic.IntervalCases
-import Mathlib.Tactic.NormNum.Prime
+module
+
+public import OeisA92243.Checks
+public import Mathlib.Data.Nat.Prime.Nth
+public import Mathlib.Algebra.BigOperators.Intervals
+public import Mathlib.Tactic.IntervalCases
+public import Mathlib.Tactic.NormNum.Prime
 
 /-!
 # Soundness: from the kernel computation to the tug-of-war score
@@ -45,6 +47,8 @@ Steps:
 Everything is proved for general bounds; the numbers 3666582 and 261150 only enter at the end,
 through `exact`/`rw` (never `simp` or `decide`, which could try to unfold a 3.6-million-element list).
 -/
+
+@[expose] public section
 
 namespace OeisA92243
 
@@ -373,3 +377,5 @@ theorem partialScore_261150 : partialScore 261150 = 1 := by
   exact this.symm
 
 end OeisA92243
+
+end

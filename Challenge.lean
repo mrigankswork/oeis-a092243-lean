@@ -14,8 +14,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -/
-import Mathlib.Data.Nat.Prime.Nth
-import Mathlib.Algebra.BigOperators.Intervals
+module
+
+public import Mathlib.Data.Nat.Prime.Nth
+public import Mathlib.Algebra.BigOperators.Intervals
 
 /-!
 # OEIS A092243, conjecture 1 (challenge)
@@ -26,6 +28,8 @@ The definitions `primeGap`, `a` and the statement of `conjecture1` are copied ve
 `FormalConjecturesUtil` and has no logical content). The elaborated `primeGap`, `a` and the type of
 `conjecture1` are identical (`Expr` dump, byte for byte) to upstream's.
 -/
+
+@[expose] public section
 
 namespace OeisA92243
 
@@ -47,3 +51,5 @@ theorem conjecture1 : ∃ n > 250000, a n > 0 := by
   sorry
 
 end OeisA92243
+
+end
