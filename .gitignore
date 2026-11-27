@@ -1,4 +1,7 @@
-formal-conjectures/
-*.olean
+/.cache/
+/.lake/
+/docbuild/.lake/
 check2
 __pycache__/
+formal-conjectures/
+.DS_Store
